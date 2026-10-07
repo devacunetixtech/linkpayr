@@ -23,7 +23,7 @@ export function CreatePaymentLink() {
     if (!address || !amount || Number(amount) <= 0) return;
     setError("");
     if (!isContractConfigured) {
-      setError("PayLink is not ready on this network yet. Please try again shortly.");
+      setError("LinkPayr is not ready on this network yet. Please try again shortly.");
       return;
     }
     const id = createLinkId(address);
@@ -91,7 +91,7 @@ export function CreatePaymentLink() {
           {!isConnected ? "Connect wallet to continue" : isPending ? "Confirm in wallet…" : confirming ? "Creating on-chain…" : "Create payment link"}
         </button>
       </form>
-      <p className="form-note">Your link is recorded on BOT Chain Testnet. PayLink never handles your private keys.</p>
+      <p className="form-note">Your link is recorded on BOT Chain Testnet. LinkPayr never handles your private keys.</p>
     </section>
   );
 }

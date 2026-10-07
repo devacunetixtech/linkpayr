@@ -1,8 +1,8 @@
-# PayLink
+# LinkPayr
 
-**Send money with a link.**
+**Payment requests made simple.**
 
-PayLink is a simple BOT Chain payment-link application. A user creates an on-chain request with an exact BOT amount and optional description, then shares the generated URL or QR code. Another wallet opens the link and pays the recipient directly.
+LinkPayr is a simple BOT Chain payment-request application. A user creates an on-chain request with an exact BOT amount and optional description, then shares the generated URL or QR code. Another wallet opens the link and pays the recipient directly.
 
 ## Features
 
@@ -16,7 +16,7 @@ PayLink is a simple BOT Chain payment-link application. A user creates an on-cha
 - Copy/share-friendly links
 - Clear pending, paid, cancelled, invalid and error states
 - Responsive, beginner-friendly UI
-- PayLink favicon plus a 1024×1024 social profile logo
+- LinkPayr favicon plus a 1024×1024 social profile logo
 
 ## Network
 
@@ -35,7 +35,7 @@ PayLink is a simple BOT Chain payment-link application. A user creates an on-cha
 
 ## Contract design
 
-`PayLink.sol` stores each request under a caller-generated `bytes32` ID. It records the recipient, amount, description, lifecycle state, payer and timestamps. Payment uses the chain's native BOT token and requires an exact amount. State is changed before value transfer, preventing a successful reentrant second payment. The contract exposes wallet-indexed created/paid link IDs for history.
+`PayLink.sol` stores each request under a caller-generated `bytes32` ID. It records the recipient, amount, description, lifecycle state, payer and timestamps. Payment uses the chain's native BOT token and requires an exact amount. State is changed before value transfer, preventing a successful reentrant second payment. The contract exposes wallet-indexed created/paid link IDs for history. The Solidity implementation keeps its original `PayLink` name so LinkPayr remains compatible with the existing verified testnet deployment.
 
 ## Local setup
 
@@ -93,11 +93,11 @@ Add these GitHub repository secrets before running the workflow:
 - `PRIVATE_KEY` — funded testnet deployer key, including the `0x` prefix
 - `BLOCKSCOUT_API_KEY` — Blockscout verification API key
 
-Then open **Actions → Deploy PayLink to BOT Chain Testnet → Run workflow**. Private keys are read only by GitHub Actions and are never stored in the repository or frontend bundle.
+Then open **Actions → Deploy LinkPayr contract to BOT Chain Testnet → Run workflow**. Private keys are read only by GitHub Actions and are never stored in the repository or frontend bundle.
 
 ## Pages
 
-- `/` — public PayLink landing page
+- `/` — public LinkPayr landing page
 - `/app` — wallet-gated payment-link dashboard and live history
 - `/pay/[id]` — public payment request page; wallet connection is required to pay
 
@@ -106,14 +106,14 @@ All balances, link states, transactions and confirmations come from the connecte
 ## Brand assets
 
 - `app/icon.svg` — application favicon
-- `public/paylink-logo.svg` — scalable PayLink logo
-- `public/profile-logo.png` — 1024×1024 social profile image
+- `public/linkpayr-logo.svg` — scalable LinkPayr logo
+- `public/linkpayr-profile-logo.png` — 1024×1024 social profile image
 
 ## Security notes
 
 - Never commit `.env`, `.env.local` or a deployer private key.
 - The frontend only requests transactions from the user's connected wallet.
-- PayLink does not custody funds; successful payments are forwarded directly to the link recipient.
+- LinkPayr does not custody funds; successful payments are forwarded directly to the link recipient.
 - The contract follows checks-effects-interactions and prevents duplicate IDs, zero-value requests, wrong payment amounts, repeat settlement and unauthorized cancellation.
 - This project has tests but has not received a professional audit. Review and audit before production use.
 

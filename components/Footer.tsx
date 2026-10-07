@@ -5,8 +5,8 @@ export function Footer() {
     <footer className="site-footer">
       <div className="footer-inner">
         <div className="footer-brand">
-          <Image src="/paylink-logo.svg" alt="PayLink" width={30} height={30} />
-          <div><strong>PayLink</strong><span>Send money with a link.</span></div>
+          <Image src="/linkpayr-logo.svg" alt="LinkPayr" width={30} height={30} />
+          <div><strong>LinkPayr</strong><span>Payment requests made simple.</span></div>
         </div>
         <div className="botchain-partner">
           <span>Built on</span>

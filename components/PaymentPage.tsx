@@ -35,13 +35,13 @@ export function PaymentPage({ id }: { id: `0x${string}` }) {
 
   if (isSuccess) {
     return (
-      <main className="payment-shell"><section className="card payment-card success-card"><div className="success-icon"><Check /></div><p className="eyebrow">Payment confirmed</p><h1>You’re all set</h1><p className="muted">Your BOT was sent directly to the recipient and confirmed on-chain.</p><a className="button button-quiet button-full" href={`https://scan.bohr.life/tx/${hash}`} target="_blank" rel="noreferrer">View transaction <ExternalLink size={16} /></a><Link className="text-button" href="/">Create your own PayLink</Link></section></main>
+      <main className="payment-shell"><section className="card payment-card success-card"><div className="success-icon"><Check /></div><p className="eyebrow">Payment confirmed</p><h1>You’re all set</h1><p className="muted">Your BOT was sent directly to the recipient and confirmed on-chain.</p><a className="button button-quiet button-full" href={`https://scan.bohr.life/tx/${hash}`} target="_blank" rel="noreferrer">View transaction <ExternalLink size={16} /></a><Link className="text-button" href="/">Create your own LinkPayr request</Link></section></main>
     );
   }
 
-  if (!isContractConfigured) return <main className="payment-shell"><section className="card payment-card"><CircleX className="error-large"/><h1>PayLink is not available yet</h1><p className="muted">The BOT Chain Testnet contract is still being prepared. Please try again later.</p><Link className="button button-primary" href="/">Go to PayLink</Link></section></main>;
+  if (!isContractConfigured) return <main className="payment-shell"><section className="card payment-card"><CircleX className="error-large"/><h1>LinkPayr is not available yet</h1><p className="muted">The BOT Chain Testnet contract is still being prepared. Please try again later.</p><Link className="button button-primary" href="/">Go to LinkPayr</Link></section></main>;
   if (isLoading) return <main className="payment-shell"><LoaderCircle className="spinner" /></main>;
-  if (isError || !payment) return <main className="payment-shell"><section className="card payment-card"><CircleX className="error-large"/><h1>Payment link not found</h1><p className="muted">Check the URL or ask the sender for a new link.</p><Link className="button button-primary" href="/">Go to PayLink</Link></section></main>;
+  if (isError || !payment) return <main className="payment-shell"><section className="card payment-card"><CircleX className="error-large"/><h1>Payment request not found</h1><p className="muted">Check the URL or ask the sender for a new link.</p><Link className="button button-primary" href="/">Go to LinkPayr</Link></section></main>;
 
   const unavailable = payment.status !== 0;
   return (

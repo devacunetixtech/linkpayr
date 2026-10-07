@@ -1,4 +1,4 @@
-name: Deploy PayLink to BOT Chain Testnet
+name: Deploy LinkPayr contract to BOT Chain Testnet
 
 on:
   workflow_dispatch:
@@ -7,7 +7,7 @@ permissions:
   contents: write
 
 concurrency:
-  group: paylink-botchain-testnet-deploy
+  group: linkpayr-botchain-testnet-deploy
   cancel-in-progress: false
 
 jobs:

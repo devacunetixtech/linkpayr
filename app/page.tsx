@@ -11,7 +11,7 @@ export default function Home() {
         <section className="landing-hero">
           <div className="hero-copy">
             <div className="network-pill"><span className="status-dot" /> BOT Chain Testnet</div>
-            <h1>Send money with a link.</h1>
+            <h1>Payment requests made simple.</h1>
             <p>Create a payment request, share the URL or QR code, and receive BOT directly in your wallet.</p>
             <div className="hero-actions">
               <Link href="/app" className="button button-primary">Create a payment link <ArrowRight size={17} /></Link>
@@ -19,7 +19,7 @@ export default function Home() {
             </div>
             <div className="hero-proof"><ShieldCheck /><span>Non-custodial</span><span className="proof-divider" /><span>Verified on-chain</span></div>
           </div>
-          <div className="flow-panel" aria-label="PayLink payment flow">
+          <div className="flow-panel" aria-label="LinkPayr payment flow">
             <p className="overline">A simpler way to request BOT</p>
             <h2>One link. One exact amount. One on-chain result.</h2>
             <div className="flow-row"><span><Link2 /></span><div><strong>Create the request</strong><p>The amount and recipient are written to the contract.</p></div></div>
@@ -36,10 +36,10 @@ export default function Home() {
           </div>
         </section>
         <section className="security-section" id="security">
-          <div><p className="overline">Built for direct payments</p><h2>Your wallet stays in control.</h2><p>PayLink does not hold funds or ask for private keys. Payments move directly from the payer’s wallet to the recipient specified in the contract.</p></div>
+          <div><p className="overline">Built for direct payments</p><h2>Your wallet stays in control.</h2><p>LinkPayr does not hold funds or ask for private keys. Payments move directly from the payer’s wallet to the recipient specified in the contract.</p></div>
           <ul><li><Check /> Exact payment amounts</li><li><Check /> On-chain payment status</li><li><Check /> Public transaction records</li><li><Check /> No custodial account</li></ul>
         </section>
-        <section className="landing-cta"><div><p className="overline">Ready to get paid?</p><h2>Create your first PayLink.</h2></div><Link href="/app" className="button button-primary">Open the app <ArrowRight size={17} /></Link></section>
+        <section className="landing-cta"><div><p className="overline">Ready to get paid?</p><h2>Create your first LinkPayr request.</h2></div><Link href="/app" className="button button-primary">Open the app <ArrowRight size={17} /></Link></section>
       </main>
       <Footer />
     </>

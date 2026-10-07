@@ -14,11 +14,11 @@ export function WalletGate({ children }: { children: ReactNode }) {
     <main className="gate-shell">
       <section className="gate-card">
         <div className="gate-icon"><WalletCards /></div>
-        <p className="overline">PayLink app</p>
+        <p className="overline">LinkPayr app</p>
         <h1>{isConnected ? "Switch to BOT Chain Testnet" : "Connect your wallet to continue"}</h1>
-        <p>{isConnected ? "PayLink uses BOT Chain Testnet for payment links and transaction history." : "Your wallet is your PayLink account. Connect to create payment links and view your on-chain history."}</p>
+        <p>{isConnected ? "LinkPayr uses BOT Chain Testnet for payment links and transaction history." : "Your wallet is your LinkPayr account. Connect to create payment links and view your on-chain history."}</p>
         <WalletButton />
-        <small>PayLink never asks for your private key.</small>
+        <small>LinkPayr never asks for your private key.</small>
       </section>
     </main>
   );

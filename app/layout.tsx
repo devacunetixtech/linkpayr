@@ -7,13 +7,13 @@ const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"),
-  title: "PayLink — Send money with a link",
-  description: "Create simple, verifiable BOT Chain payment links.",
+  title: "LinkPayr — Payment requests made simple",
+  description: "Create simple, verifiable BOT Chain payment requests.",
   icons: { icon: "/icon.svg" },
   openGraph: {
-    title: "PayLink — Send money with a link",
-    description: "Create and pay verifiable BOT Chain payment links.",
-    images: ["/profile-logo.png"],
+    title: "LinkPayr — Payment requests made simple",
+    description: "Create and pay verifiable BOT Chain payment requests.",
+    images: ["/linkpayr-profile-logo.png"],
   },
 };
 

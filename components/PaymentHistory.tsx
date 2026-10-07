@@ -36,7 +36,7 @@ export function PaymentHistory() {
       {!address ? (
         <div className="empty-state"><Clock3 /><p>Connect your wallet to see your payment history.</p></div>
       ) : !isContractConfigured ? (
-        <div className="empty-state"><Clock3 /><p>PayLink is being prepared on BOT Chain Testnet. Please check back shortly.</p></div>
+        <div className="empty-state"><Clock3 /><p>LinkPayr is being prepared on BOT Chain Testnet. Please check back shortly.</p></div>
       ) : links.length === 0 ? (
         <div className="empty-state"><Clock3 /><p>Your payment links will appear here.</p></div>
       ) : (

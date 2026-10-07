@@ -28,6 +28,11 @@ PayLink is a simple BOT Chain payment-link application. A user creates an on-cha
 | Explorer | `https://scan.bohr.life` |
 | Faucet | `https://faucet.botchain.ai` |
 
+### Verified deployment
+
+- Contract: [`0x486fea442bba9fa6c3fd39a1b51ce58cb778f6a3`](https://scan.bohr.life/address/0x486fea442bba9fa6c3fd39a1b51ce58cb778f6a3)
+- Status: verified on BOT Chain Testnet Blockscout
+
 ## Contract design
 
 `PayLink.sol` stores each request under a caller-generated `bytes32` ID. It records the recipient, amount, description, lifecycle state, payer and timestamps. Payment uses the chain's native BOT token and requires an exact amount. State is changed before value transfer, preventing a successful reentrant second payment. The contract exposes wallet-indexed created/paid link IDs for history.

@@ -1,0 +1,50 @@
+{
+  "network": "BOT Chain Mainnet",
+  "chainId": 677,
+  "contract": "0x961aa3b8475cab88b82b7b8bf0a26bfa31ae5dc0",
+  "generatedAt": "2026-10-10T16:05:37Z",
+  "wallets": [
+    {
+      "index": 1,
+      "address": "0x7D80A5A7914aB0fAB5DCAe026df879669FC7fEf7",
+      "paymentLinkId": "0xa2ac9f2d8b3235e16136dbe1bf4bf5eb38695f1de66efa07d85909b93c7f815a",
+      "fundingTransaction": "0x618b891c5b47a7944151bde2ee1e52fd3bed6be9c1c06e81d380f9ba57437498",
+      "interactionTransaction": "0xe654585e34db29f2c00ea152edc1746f4b48088defdb1515c9cfb7726b05bfd0"
+    },
+    {
+      "index": 2,
+      "address": "0x83F5A00ACfAaBC4C5Ad68A8FC20cB55D90A21B56",
+      "paymentLinkId": "0x2ad15d45d8ae46d8da475d7b51677fa0c94eeb0805d25fbe65c8e6a69f332a6d",
+      "fundingTransaction": "0x51a62a58acb05a9dd27053449989396d2760d9b0945f8226152c6ea1973ec29f",
+      "interactionTransaction": "0x205026af79cc7bbd0c5b1d22ca4bcaaf579ed69010649264b74b72214783ed87"
+    },
+    {
+      "index": 3,
+      "address": "0x5082b427db5FA63e9bAd69eD279cCd548a809533",
+      "paymentLinkId": "0x96e6a779730137598c48c6eb90a64a589595fbc155c946d6a6fe2d605147d618",
+      "fundingTransaction": "0x69de05cba622e6de62cc65dcfd90276fc5e886046faee330c2db4571ba3fe54c",
+      "interactionTransaction": "0x347718f3b0f3fb99fa4ab4316b4e0cd3cae8e79e2dabfec5c92642bfa3b9c6d8"
+    },
+    {
+      "index": 4,
+      "address": "0x7c1A98e660446389D4089Ab11D01E1A9B712e7e4",
+      "paymentLinkId": "0x00c982fabf2520e26c43486ed15f0d3acdac79a385151fbe0758e662acaa6d5a",
+      "fundingTransaction": "0xadee8e73100ea84f1bfd4e2dab1f30168d3d943a00f391f52380050bc11b3d04",
+      "interactionTransaction": "0xdd93eadef206dde1544b38df2743e2cc6199c8d7df318fae897bb0921be98f66"
+    },
+    {
+      "index": 5,
+      "address": "0x80dAb9e004A3F85344536773FBc4d86d819A7be6",
+      "paymentLinkId": "0xd373e848256d8b4de8e24e7bd8bd04da57dcb654ad8d99b17e6fe7ac55465bb0",
+      "fundingTransaction": "0x1f58bb44e3ba9c36bfa322bbe2d8a32007841aa5a607f63128e0d842555aaf37",
+      "interactionTransaction": "0xa1f0d6ba05f8ceeacd9d843b5012350be83be520752b26e808de4403d40ad1f0"
+    },
+    {
+      "index": 6,
+      "address": "0xee6b77fAd7012b63036df41FaE4f2Eeba503A2eE",
+      "paymentLinkId": "0xb9210fc6c50b71cf076eb728b1a38ebe4b73fd6deec0182e997b39bb93428094",
+      "fundingTransaction": "0x3c691f304e01ce1f583c966501be6f845d803e13effb751c0d1eea24e6b141c1",
+      "interactionTransaction": "0x297bbebe02f170f475fb4fc2631b2ebdb63abe6b96c9c50835c282379b65b6a3"
+    }
+  ]
+}

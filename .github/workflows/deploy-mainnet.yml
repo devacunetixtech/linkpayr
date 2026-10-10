@@ -1,0 +1,201 @@
+name: Deploy LinkPayr to BOT Chain Mainnet
+
+on:
+  workflow_dispatch:
+    inputs:
+      create_interaction_wallets:
+        description: Create six temporary wallets and record one real interaction from each
+        required: true
+        type: boolean
+        default: true
+
+permissions:
+  contents: write
+
+concurrency:
+  group: linkpayr-botchain-mainnet-deploy
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    environment: botchain-mainnet
+    env:
+      BOTCHAIN_MAINNET_RPC_URL: https://rpc.botchain.ai
+      BOTCHAIN_MAINNET_VERIFIER_URL: https://scan.botchain.ai/api/
+    outputs:
+      address: ${{ steps.contract.outputs.address }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - uses: foundry-rs/foundry-toolchain@v1
+        with:
+          version: stable
+
+      - name: Check deployment secrets
+        env:
+          PRIVATE_KEY: ${{ secrets.PRIVATE_KEY }}
+          BLOCKSCOUT_API_KEY: ${{ secrets.BLOCKSCOUT_API_KEY }}
+        run: |
+          test -n "$PRIVATE_KEY" || { echo "PRIVATE_KEY is not configured."; exit 1; }
+          test -n "$BLOCKSCOUT_API_KEY" || { echo "BLOCKSCOUT_API_KEY is not configured."; exit 1; }
+          [[ "$PRIVATE_KEY" =~ ^0x[0-9a-fA-F]{64}$ ]] || { echo "PRIVATE_KEY must be a 0x-prefixed 32-byte key."; exit 1; }
+
+      - name: Confirm BOT Chain Mainnet
+        run: |
+          CHAIN_ID=$(cast chain-id --rpc-url "$BOTCHAIN_MAINNET_RPC_URL")
+          test "$CHAIN_ID" = "677" || { echo "The configured RPC is not BOT Chain Mainnet."; exit 1; }
+
+      - name: Install contract dependencies
+        run: forge install foundry-rs/forge-std --no-git
+
+      - name: Run contract tests
+        run: forge test -vvv
+
+      - name: Deploy and verify
+        env:
+          PRIVATE_KEY: ${{ secrets.PRIVATE_KEY }}
+          BLOCKSCOUT_API_KEY: ${{ secrets.BLOCKSCOUT_API_KEY }}
+        run: |
+          forge script script/DeployLinkPayr.s.sol:DeployLinkPayr \
+            --rpc-url "$BOTCHAIN_MAINNET_RPC_URL" \
+            --broadcast \
+            --verify \
+            --verifier blockscout \
+            --verifier-url "$BOTCHAIN_MAINNET_VERIFIER_URL" \
+            --etherscan-api-key "$BLOCKSCOUT_API_KEY" \
+            --slow
+
+      - name: Record mainnet deployment
+        id: contract
+        run: |
+          ADDRESS=$(jq -r '.transactions[] | select(.contractName == "LinkPayr") | .contractAddress' broadcast/DeployLinkPayr.s.sol/677/run-latest.json | tail -1)
+          [[ "$ADDRESS" =~ ^0x[0-9a-fA-F]{40}$ ]] || { echo "Could not read the deployed contract address."; exit 1; }
+          echo "address=$ADDRESS" >> "$GITHUB_OUTPUT"
+          printf '// Updated automatically by the verified mainnet deployment workflow.\nexport const LINKPAYR_MAINNET_ADDRESS = "%s" as const;\n' "$ADDRESS" > lib/deployment.ts
+          mkdir -p deployments
+          jq -n \
+            --arg address "$ADDRESS" \
+            --arg network "BOT Chain Mainnet" \
+            --argjson chainId 677 \
+            --arg explorer "https://scan.botchain.ai/address/$ADDRESS" \
+            '{network:$network,chainId:$chainId,address:$address,explorer:$explorer,verified:true}' \
+            > deployments/botchain-mainnet.json
+
+      - name: Commit deployment record
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add lib/deployment.ts deployments/botchain-mainnet.json
+          git commit -m "chore: record BOT Chain mainnet deployment"
+          git push
+
+  interact:
+    if: ${{ inputs.create_interaction_wallets }}
+    needs: deploy
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    environment: botchain-mainnet
+    env:
+      BOTCHAIN_MAINNET_RPC_URL: https://rpc.botchain.ai
+      CONTRACT_ADDRESS: ${{ needs.deploy.outputs.address }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - uses: foundry-rs/foundry-toolchain@v1
+        with:
+          version: stable
+
+      - name: Create six real low-cost interactions
+        env:
+          PRIVATE_KEY: ${{ secrets.PRIVATE_KEY }}
+        run: |
+          set -euo pipefail
+          umask 077
+          [[ "$PRIVATE_KEY" =~ ^0x[0-9a-fA-F]{64}$ ]] || { echo "PRIVATE_KEY is not configured correctly."; exit 1; }
+          [[ "$CONTRACT_ADDRESS" =~ ^0x[0-9a-fA-F]{40}$ ]] || { echo "The mainnet contract address is unavailable."; exit 1; }
+
+          CHAIN_ID=$(cast chain-id --rpc-url "$BOTCHAIN_MAINNET_RPC_URL")
+          test "$CHAIN_ID" = "677" || { echo "The configured RPC is not BOT Chain Mainnet."; exit 1; }
+          DEPLOYER=$(cast wallet address --private-key "$PRIVATE_KEY")
+
+          mkdir -p deployments
+          RESULTS=$(mktemp)
+          NEXT_RESULTS=$(mktemp)
+          trap 'rm -f "$RESULTS" "$NEXT_RESULTS"' EXIT
+          jq -n \
+            --arg contract "$CONTRACT_ADDRESS" \
+            --arg network "BOT Chain Mainnet" \
+            --arg generatedAt "$(date -u +%Y-%m-%dT%H:%M:%SZ)" \
+            '{network:$network,chainId:677,contract:$contract,generatedAt:$generatedAt,wallets:[]}' \
+            > "$RESULTS"
+
+          {
+            echo "## LinkPayr mainnet interaction wallets"
+            echo
+            echo "Each temporary wallet created one 1-wei payment request with an empty description. Private keys were never logged or committed and were discarded when the job ended."
+            echo
+            echo "| # | Wallet | Interaction |"
+            echo "|---:|---|---|"
+          } >> "$GITHUB_STEP_SUMMARY"
+
+          for INDEX in $(seq 1 6); do
+            WALLET_KEY="0x$(openssl rand -hex 32)"
+            WALLET_ADDRESS=$(cast wallet address --private-key "$WALLET_KEY")
+            LINK_ID=$(cast keccak "linkpayr-mainnet-${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}-${INDEX}")
+            GAS_PRICE=$(cast gas-price --rpc-url "$BOTCHAIN_MAINNET_RPC_URL")
+            ESTIMATED_GAS=$(cast estimate \
+              "$CONTRACT_ADDRESS" \
+              "createPaymentLink(bytes32,address,uint256,string)" \
+              "$LINK_ID" "$WALLET_ADDRESS" 1 "" \
+              --from "$DEPLOYER" \
+              --rpc-url "$BOTCHAIN_MAINNET_RPC_URL")
+            GAS_LIMIT=$(( (ESTIMATED_GAS * 105 + 99) / 100 ))
+            FUNDING_AMOUNT=$(( (GAS_LIMIT * GAS_PRICE * 105 + 99) / 100 ))
+
+            FUNDING_TX=$(cast send "$WALLET_ADDRESS" \
+              --value "$FUNDING_AMOUNT" \
+              --gas-price "$GAS_PRICE" \
+              --private-key "$PRIVATE_KEY" \
+              --rpc-url "$BOTCHAIN_MAINNET_RPC_URL" \
+              --json | jq -r '.transactionHash')
+
+            INTERACTION_TX=$(cast send "$CONTRACT_ADDRESS" \
+              "createPaymentLink(bytes32,address,uint256,string)" \
+              "$LINK_ID" "$WALLET_ADDRESS" 1 "" \
+              --gas-limit "$GAS_LIMIT" \
+              --gas-price "$GAS_PRICE" \
+              --private-key "$WALLET_KEY" \
+              --rpc-url "$BOTCHAIN_MAINNET_RPC_URL" \
+              --json | jq -r '.transactionHash')
+
+            jq \
+              --argjson index "$INDEX" \
+              --arg address "$WALLET_ADDRESS" \
+              --arg paymentLinkId "$LINK_ID" \
+              --arg fundingTransaction "$FUNDING_TX" \
+              --arg interactionTransaction "$INTERACTION_TX" \
+              '.wallets += [{index:$index,address:$address,paymentLinkId:$paymentLinkId,fundingTransaction:$fundingTransaction,interactionTransaction:$interactionTransaction}]' \
+              "$RESULTS" > "$NEXT_RESULTS"
+            mv "$NEXT_RESULTS" "$RESULTS"
+            echo "| $INDEX | [$WALLET_ADDRESS](https://scan.botchain.ai/address/$WALLET_ADDRESS) | [$INTERACTION_TX](https://scan.botchain.ai/tx/$INTERACTION_TX) |" >> "$GITHUB_STEP_SUMMARY"
+            unset WALLET_KEY
+          done
+
+          mv "$RESULTS" deployments/botchain-mainnet-interactions.json
+          trap - EXIT
+          rm -f "$NEXT_RESULTS"
+
+      - name: Commit public interaction records
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add deployments/botchain-mainnet-interactions.json
+          git commit -m "chore: record six LinkPayr mainnet interactions"
+          git push

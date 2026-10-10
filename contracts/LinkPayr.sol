@@ -1,9 +1,9 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.28;
 
-/// @title PayLink
+/// @title LinkPayr
 /// @notice Create and settle fixed-value BOT payment links on-chain.
-contract PayLink {
+contract LinkPayr {
     enum Status { Open, Paid, Cancelled }
 
     struct PaymentLink {

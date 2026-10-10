@@ -5,6 +5,7 @@ coverage
 out
 cache
 broadcast
+lib/forge-std/
 .turbo
 .vercel
 .idea
@@ -15,6 +16,9 @@ broadcast
 *.log
 *.tsbuildinfo
 *.tmp
+*.key
+*.pem
+*.zip
 *.swp
 .eslintcache
 .DS_Store

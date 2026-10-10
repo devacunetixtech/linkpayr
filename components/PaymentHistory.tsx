@@ -4,20 +4,20 @@ import Link from "next/link";
 import { ArrowUpRight, Clock3, History } from "lucide-react";
 import { formatEther, zeroAddress } from "viem";
 import { useAccount, useReadContract, useReadContracts } from "wagmi";
-import { PAYLINK_ADDRESS, isContractConfigured, payLinkAbi, type PaymentLinkData } from "@/lib/contract";
+import { LINKPAYR_ADDRESS, isContractConfigured, linkPayrAbi, type PaymentLinkData } from "@/lib/contract";
 
 export function PaymentHistory() {
   const { address } = useAccount();
   const { data: createdIds = [] } = useReadContract({
-    address: PAYLINK_ADDRESS,
-    abi: payLinkAbi,
+    address: LINKPAYR_ADDRESS,
+    abi: linkPayrAbi,
     functionName: "getCreatedLinks",
     args: [address || zeroAddress],
     query: { enabled: Boolean(address) && isContractConfigured, refetchInterval: 8_000 },
   });
   const { data: paidIds = [] } = useReadContract({
-    address: PAYLINK_ADDRESS,
-    abi: payLinkAbi,
+    address: LINKPAYR_ADDRESS,
+    abi: linkPayrAbi,
     functionName: "getPaidLinks",
     args: [address || zeroAddress],
     query: { enabled: Boolean(address) && isContractConfigured, refetchInterval: 8_000 },
@@ -25,7 +25,7 @@ export function PaymentHistory() {
 
   const ids = Array.from(new Set([...(createdIds || []), ...(paidIds || [])]));
   const { data } = useReadContracts({
-    contracts: ids.map((id) => ({ address: PAYLINK_ADDRESS, abi: payLinkAbi, functionName: "getPaymentLink", args: [id] })),
+    contracts: ids.map((id) => ({ address: LINKPAYR_ADDRESS, abi: linkPayrAbi, functionName: "getPaymentLink", args: [id] })),
     query: { enabled: ids.length > 0 && isContractConfigured, refetchInterval: 8_000 },
   });
   const links = (data || []).flatMap((result) => result.status === "success" ? [result.result as PaymentLinkData] : []).reverse();
@@ -36,7 +36,7 @@ export function PaymentHistory() {
       {!address ? (
         <div className="empty-state"><Clock3 /><p>Connect your wallet to see your payment history.</p></div>
       ) : !isContractConfigured ? (
-        <div className="empty-state"><Clock3 /><p>LinkPayr is being prepared on BOT Chain Testnet. Please check back shortly.</p></div>
+        <div className="empty-state"><Clock3 /><p>LinkPayr is being prepared on BOT Chain. Please check back shortly.</p></div>
       ) : links.length === 0 ? (
         <div className="empty-state"><Clock3 /><p>Your payment links will appear here.</p></div>
       ) : (

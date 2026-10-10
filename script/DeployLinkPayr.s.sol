@@ -2,13 +2,13 @@
 pragma solidity ^0.8.28;
 
 import {Script} from "forge-std/Script.sol";
-import {PayLink} from "../contracts/PayLink.sol";
+import {LinkPayr} from "../contracts/LinkPayr.sol";
 
-contract DeployPayLink is Script {
-    function run() external returns (PayLink payLink) {
+contract DeployLinkPayr is Script {
+    function run() external returns (LinkPayr linkPayr) {
         uint256 deployerKey = vm.envUint("PRIVATE_KEY");
         vm.startBroadcast(deployerKey);
-        payLink = new PayLink();
+        linkPayr = new LinkPayr();
         vm.stopBroadcast();
     }
 }

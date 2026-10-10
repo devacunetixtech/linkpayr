@@ -4,12 +4,12 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { useState, type ReactNode } from "react";
 import { WagmiProvider, createConfig, http } from "wagmi";
 import { injected } from "wagmi/connectors";
-import { botchainTestnet } from "@/lib/chain";
+import { botchain } from "@/lib/chain";
 
 const config = createConfig({
-  chains: [botchainTestnet],
+  chains: [botchain],
   connectors: [injected({ shimDisconnect: true })],
-  transports: { [botchainTestnet.id]: http() },
+  transports: { [botchain.id]: http() },
   ssr: true,
 });
 

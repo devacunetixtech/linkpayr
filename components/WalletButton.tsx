@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useAccount, useConnect, useDisconnect, useSwitchChain } from "wagmi";
-import { botchainTestnet } from "@/lib/chain";
+import { botchain } from "@/lib/chain";
 import { shortAddress } from "@/lib/utils";
 
 export function WalletButton() {
@@ -35,10 +35,10 @@ export function WalletButton() {
     );
   }
 
-  if (chainId !== botchainTestnet.id) {
+  if (chainId !== botchain.id) {
     return (
-      <button className="button button-primary wallet-button" onClick={() => switchChain({ chainId: botchainTestnet.id })} disabled={switching}>
-        {switching ? "Switching…" : "Switch to BOT Testnet"}
+      <button className="button button-primary wallet-button" onClick={() => switchChain({ chainId: botchain.id })} disabled={switching}>
+        {switching ? "Switching…" : "Switch to BOT Chain"}
       </button>
     );
   }

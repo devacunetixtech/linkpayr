@@ -10,7 +10,7 @@ export default function Home() {
       <main>
         <section className="landing-hero">
           <div className="hero-copy">
-            <div className="network-pill"><span className="status-dot" /> BOT Chain Testnet</div>
+            <div className="network-pill"><span className="status-dot" /> BOT Chain Mainnet</div>
             <h1>Payment requests made simple.</h1>
             <p>Create a payment request, share the URL or QR code, and receive BOT directly in your wallet.</p>
             <div className="hero-actions">
@@ -30,7 +30,7 @@ export default function Home() {
         <section className="how-section" id="how-it-works">
           <div className="section-intro"><p className="overline">How it works</p><h2>Three steps. No wallet address to copy.</h2></div>
           <div className="steps-grid">
-            <article><span className="step-number">01</span><WalletCards /><h3>Connect</h3><p>Connect an EVM wallet and switch to BOT Chain Testnet.</p></article>
+            <article><span className="step-number">01</span><WalletCards /><h3>Connect</h3><p>Connect an EVM wallet and switch to BOT Chain.</p></article>
             <article><span className="step-number">02</span><Link2 /><h3>Create</h3><p>Enter the amount and an optional note. The request is recorded on-chain.</p></article>
             <article><span className="step-number">03</span><QrCode /><h3>Share</h3><p>Send the link or QR code. The payer connects and confirms the payment.</p></article>
           </div>

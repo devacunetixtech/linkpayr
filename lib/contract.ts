@@ -1,11 +1,11 @@
 import type { Address } from "viem";
-import { PAYLINK_TESTNET_ADDRESS } from "./deployment";
+import { LINKPAYR_MAINNET_ADDRESS } from "./deployment";
 
-export const PAYLINK_ADDRESS = (process.env.NEXT_PUBLIC_PAYLINK_CONTRACT_ADDRESS ||
-  PAYLINK_TESTNET_ADDRESS) as Address;
-export const isContractConfigured = PAYLINK_ADDRESS !== "0x0000000000000000000000000000000000000000";
+export const LINKPAYR_ADDRESS = (process.env.NEXT_PUBLIC_LINKPAYR_CONTRACT_ADDRESS ||
+  LINKPAYR_MAINNET_ADDRESS) as Address;
+export const isContractConfigured = LINKPAYR_ADDRESS !== "0x0000000000000000000000000000000000000000";
 
-export const payLinkAbi = [
+export const linkPayrAbi = [
   {
     type: "function",
     name: "createPaymentLink",

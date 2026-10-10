@@ -5,7 +5,7 @@ import { Check, Copy, ExternalLink, Link2 } from "lucide-react";
 import { QRCodeSVG } from "qrcode.react";
 import { parseEther } from "viem";
 import { useAccount, useWaitForTransactionReceipt, useWriteContract } from "wagmi";
-import { PAYLINK_ADDRESS, isContractConfigured, payLinkAbi } from "@/lib/contract";
+import { LINKPAYR_ADDRESS, isContractConfigured, linkPayrAbi } from "@/lib/contract";
 import { createLinkId, getFriendlyError, paymentUrl } from "@/lib/utils";
 
 export function CreatePaymentLink() {
@@ -29,8 +29,8 @@ export function CreatePaymentLink() {
     const id = createLinkId(address);
     try {
       await writeContractAsync({
-        address: PAYLINK_ADDRESS,
-        abi: payLinkAbi,
+        address: LINKPAYR_ADDRESS,
+        abi: linkPayrAbi,
         functionName: "createPaymentLink",
         args: [id, address, parseEther(amount), description.trim()],
       });
@@ -91,7 +91,7 @@ export function CreatePaymentLink() {
           {!isConnected ? "Connect wallet to continue" : isPending ? "Confirm in wallet…" : confirming ? "Creating on-chain…" : "Create payment link"}
         </button>
       </form>
-      <p className="form-note">Your link is recorded on BOT Chain Testnet. LinkPayr never handles your private keys.</p>
+      <p className="form-note">Your link is recorded on BOT Chain. LinkPayr never handles your private keys.</p>
     </section>
   );
 }
